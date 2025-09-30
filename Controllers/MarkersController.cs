@@ -5,15 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace MapsReact.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 public class MarkersController : ControllerBase
 {
-  
-    
 
-   
 
-     private readonly IMarkersService _markersService;
+
+
+
+    private readonly IMarkersService _markersService;
 
     public MarkersController(IMarkersService markersService)
     {
@@ -23,11 +23,16 @@ public class MarkersController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<Marker>> Get()
     {
-        return  await _markersService.GetAllMarkers();
+        return await _markersService.GetAllMarkers();
     }
-      [HttpPost]
-    public  void Post(Marker polygon)
+    [HttpPost]
+    public void Post(Marker marker)
     {
-        _markersService.AddMarker(polygon);
+        _markersService.AddMarker(marker);
+    }
+     [HttpPost]
+    public  void PostBulk(List<Marker> markers)
+    {
+        _markersService.AddMarkers(markers);
     }
 }

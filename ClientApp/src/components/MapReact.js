@@ -8,6 +8,9 @@ import { Icon, divIcon, point } from "leaflet";
 import { use, useEffect, useState } from "react";
 import { LocationMarker } from "./LocationMarker";
 import { addPolygonToDelete, getAllPolygons, removePolygonToDelete, setPoligons } from "../redux/features/polygonSlice";
+import { getAllMarkers } from "../redux/features/markersSlice";
+import { PolygonsUtil } from "../utils/polygonsUtil";
+import { MarkersUtil } from "../utils/markersUtil";
 
 // create custom icon
 const customIcon = new Icon({
@@ -24,18 +27,7 @@ const createClusterCustomIcon = function (cluster) {
     iconSize: point(33, 33, true)
   });
 };
-// const polygons = [  [
-//     [48.86, 2.3522],
-//     [48.85, 2.3522],
-//     [48.855, 2.34],
-//   ],
-//   [
-//     [51.51, -0.05],
-//     [51.51, -0.07],
-//     [51.53, -0.07],
-//   ],
-// ];
-// markers
+
 const initialMarkers = [
   {
     geocode: [48.86, 2.3522],
@@ -52,8 +44,8 @@ const initialMarkers = [
 ];
 
 export default function MapReact({editMode}) {
-    const [selectedPosition, setSelectedPosition] = useState([0,0]);
-    const [markers, setMarkers] = useState(initialMarkers);
+   
+    const [markers, setMarkers] = useState([]);
     const [polygons ,setPolygons]= useState([])
     const [polygonsToDelete ,setPolygonsToDelete]= useState([])
     const [selectedPolygons ,setSelectedPolygons]= useState([])
@@ -61,32 +53,29 @@ export default function MapReact({editMode}) {
      const savedPolygons = useSelector(state=>state.polygon.list);
      const newPolygon = useSelector(state=>state.polygon.newPolygon)
      const newMarkers = useSelector(state=>state.marker.newMarkers)
+     const savedMarkers = useSelector(state=>state.marker.list)
+    
      const dispatch = useDispatch();
 
      useEffect(()=>{
       dispatch(getAllPolygons())
+      dispatch(getAllMarkers())
      },[])
 
      useEffect(()=>{
      
-      const convertedArr = [];
-      if(savedPolygons ){
-        savedPolygons.forEach(sp =>{
-         
-         const latLngs =  sp.positions.map(p => [p.latitude,p.longitude])
-          const positionArr = [latLngs]
-          convertedArr.push({positions:positionArr,id:sp.id});
-
-        })
-      }
-      if(convertedArr.length > 0){
-        setPolygons(convertedArr)
-      }
-     
-      
-      
+        const convertedArr = PolygonsUtil.convertToLeatletPolygons(savedPolygons)
+        if(convertedArr.length > 0){
+          setPolygons(convertedArr)
+        }
 
      },[savedPolygons])
+
+     useEffect(()=>{
+      const mrkrs = MarkersUtil.convertToLeafletMarkers(savedMarkers);
+      if(mrkrs.length > 0)
+      setMarkers([...mrkrs])
+     },[savedMarkers])
 
      useEffect(()=>{
       if(newMarkers && newMarkers.length >0){

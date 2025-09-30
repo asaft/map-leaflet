@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace MapsReact.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 public class PolygonsController : ControllerBase
 {
-  
+
 
     private readonly IPoligonService _poligonService;
 
@@ -21,11 +21,18 @@ public class PolygonsController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<Polygon>> Get()
     {
-        return  await _poligonService.GetAllPolygons();
+        return await _poligonService.GetAllPolygons();
     }
-      [HttpPost]
-    public  void Post(Polygon polygon)
+    [HttpPost]
+    public IActionResult Post(Polygon polygon)
     {
         _poligonService.AddPolygon(polygon);
+        return Ok(polygon);
+    }
+     [HttpPost]
+    public async Task<IEnumerable<Polygon>> DeleteAsync(List<string>ids)
+    {
+        await _poligonService.DeletePolygons(ids);
+        return await _poligonService.GetAllPolygons();
     }
 }

@@ -7,31 +7,33 @@ namespace MapsReact.Services;
 public class MarkersService:IMarkersService
 {
     private readonly IMongoCollection<Polygon> _objectsCollection;
+    private IMongoDatabase<Marker> _db;
 
-    public MarkersService(IOptions<MapStoreDatabaseSettings> mapStoreDatabaseSettings)
+    public MarkersService(IMongoDatabase<Marker> db, IOptions<MapStoreDatabaseSettings> mapStoreDatabaseSettings)
     {
-         var mongoClient = new MongoClient(
-            mapStoreDatabaseSettings.Value.ConnectionString);
-
-        var mongoDatabase = mongoClient.GetDatabase(
-            mapStoreDatabaseSettings.Value.DatabaseName);
-
-        _objectsCollection = mongoDatabase.GetCollection<Polygon>(
-            mapStoreDatabaseSettings.Value.PoligonsCollectionName);
+        _db = db;
+        _db.SetConn(mapStoreDatabaseSettings.Value.ObjectsCollectionName);
     }
 
     public Marker AddMarker(Marker marker)
     {
-        throw new NotImplementedException();
+        _db.Add(marker);
+        return marker;
     }
 
-    public Task DeleteMarker(string id)
+    public List<Marker> AddMarkers(List<Marker> markers)
     {
-        throw new NotImplementedException();
+        _db.AddBulk(markers);
+        return markers;
     }
 
-    public Task<List<Marker>> GetAllMarkers()
+    public async Task DeleteMarker(string id)
     {
-        throw new NotImplementedException();
+        await _db.Delete(id);
+    }
+
+    public async Task<List<Marker>> GetAllMarkers()
+    {
+        return  await _db.GetAll();
     }
 }

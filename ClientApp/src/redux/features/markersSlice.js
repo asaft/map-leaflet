@@ -5,12 +5,12 @@ const axios = axiosInstance.getInstance();
 
 export const getAllMarkers = createAsyncThunk('get/markers',async ()=>{
     
-  const response = await axios.get("/api/polygons");
+  const response = await axios.get("/api/markers/get");
   return response.data; // This becomes the payload
 })
-export const saveMarker = createAsyncThunk("post/markers", async ({latitude,longitude}) => {
+export const saveMarker = createAsyncThunk("post/markers", async (markers) => {
   
-  const response = await axios.post("/api/markers",{latitude,longitude});
+  const response = await axios.post("/api/markers/postbulk",markers);
   return response.data; // This becomes the payload
 });
 

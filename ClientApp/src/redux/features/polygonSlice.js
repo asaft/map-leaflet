@@ -5,7 +5,7 @@ const axios = axiosInstance.getInstance();
 
 export const getAllPolygons = createAsyncThunk('get/pligons',async ()=>{
     
-  const response = await axios.get("/api/polygons");
+  const response = await axios.get("/api/polygons/get");
   return response.data; // This becomes the payload
 })
 export const savePolygon = createAsyncThunk("post/polygons", async (polygon) => {
@@ -15,7 +15,14 @@ export const savePolygon = createAsyncThunk("post/polygons", async (polygon) => 
       longitude:p[1]
     }
   })
-  const response = await axios.post("/api/polygons",{positions});
+  
+  const response = await axios.post("/api/polygons/post",{positions});
+  return response.data; // This becomes the payload
+});
+export const deletePolygons = createAsyncThunk("delete/polygons", async (polygon) => {
+  
+  
+  const response = await axios.delete("/api/polygons/delete",polygon);
   return response.data; // This becomes the payload
 });
 
@@ -62,6 +69,18 @@ const polygonSlice = createSlice({
         state.list = action.payload;
       })
       .addCase(getAllPolygons.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })   
+      .addCase(deletePolygons.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deletePolygons.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list = action.payload;
+      })
+      .addCase(deletePolygons.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

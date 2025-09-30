@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using MapsReact.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
@@ -40,4 +42,20 @@ public class MongoDatabaseService<T> : IMongoDatabase<T>
     {
         return await _collection.Find(_ => true).ToListAsync();
     }
+
+    public List<T> AddBulk(List<T> items)
+    {
+        _collection.InsertMany(items);
+       
+        return items;
+    }
+
+    public async Task DeleteMany(Expression<Func<T, bool>> filterExpression)
+    {
+      
+        var filter = Builders<T>.Filter.Where(filterExpression);
+        await _collection.DeleteManyAsync(filter);
+    }
+
+    
 }

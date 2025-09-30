@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.Configure<MapStoreDatabaseSettings>(
 builder.Configuration.GetSection("MapStoreDatabase"));
 builder.Services.AddScoped<IPoligonService, PolygonsService>();  
+builder.Services.AddScoped<IMarkersService, MarkersService>();  
 builder.Services.AddScoped(typeof(IMongoDatabase<>),typeof(MongoDatabaseService<>)); 
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>

@@ -4,10 +4,10 @@ import { editMode } from "../contstants";
 
 
 export function MarkerSection({title,onAddClicked}){
-    const polygon = useSelector((state) => state.marker.newMarker);
+    const newMarkers = useSelector((state) => state.marker.newMarkers);
   const dispatch = useDispatch();
 const onSaveClicked = ()=>{
-  dispatch(saveMarker(polygon))
+  dispatch(saveMarker(newMarkers))
 }
     return(<>
     <div>{title}</div>
