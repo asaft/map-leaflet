@@ -13,6 +13,11 @@ export const saveMarker = createAsyncThunk("post/markers", async (markers) => {
   const response = await axios.post("/api/markers/postbulk",markers);
   return response.data; // This becomes the payload
 });
+export const deleteMarker = createAsyncThunk("delete/markers", async (id) => {
+  
+  const response = await axios.delete("/api/markers/delete/"+ id);
+  return response.data; // This becomes the payload
+});
 
 
 const markersSlice = createSlice({
@@ -21,9 +26,12 @@ const markersSlice = createSlice({
     loading:false,
     error:false,
     list:[],
+    markerId:null,
     newMarkers:[]},
   reducers: {
-  
+    setMarkerId:(state,action)=>{
+      state.markerId = action.payload;
+    },
     addMarker: (state, action) => {
       state.newMarkers = [...state.newMarkers,{latitude:action.payload.lat,longitude:action.payload.lng}];
     },
@@ -53,9 +61,21 @@ const markersSlice = createSlice({
       .addCase(getAllMarkers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+       .addCase(deleteMarker.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteMarker.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list = state.list.filter(m => m.id !== action.payload);
+      })
+      .addCase(deleteMarker.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   }
 });
 
-export const { addMarker } = markersSlice.actions;
+export const { addMarker,setMarkerId } = markersSlice.actions;
 export default markersSlice.reducer;

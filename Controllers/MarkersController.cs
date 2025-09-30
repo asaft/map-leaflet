@@ -30,9 +30,16 @@ public class MarkersController : ControllerBase
     {
         _markersService.AddMarker(marker);
     }
-     [HttpPost]
-    public  void PostBulk(List<Marker> markers)
+    [HttpPost]
+    public void PostBulk(List<Marker> markers)
     {
         _markersService.AddMarkers(markers);
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        await _markersService.DeleteMarker(id);
+        return Ok(id);
+        
     }
 }

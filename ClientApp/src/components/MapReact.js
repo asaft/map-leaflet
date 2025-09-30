@@ -8,7 +8,7 @@ import { Icon, divIcon, point } from "leaflet";
 import { use, useEffect, useState } from "react";
 import { LocationMarker } from "./LocationMarker";
 import { addPolygonToDelete, getAllPolygons, removePolygonToDelete, setPoligons } from "../redux/features/polygonSlice";
-import { getAllMarkers } from "../redux/features/markersSlice";
+import { getAllMarkers, setMarkerId } from "../redux/features/markersSlice";
 import { PolygonsUtil } from "../utils/polygonsUtil";
 import { MarkersUtil } from "../utils/markersUtil";
 
@@ -138,7 +138,12 @@ export default function MapReact({editMode}) {
       > */}
         {/* Mapping through the markers */}
         {markers.map((marker,i) => (
-          <Marker position={marker.geocode} key={i} icon={customIcon} >
+          <Marker position={marker.geocode} key={i} icon={customIcon} eventHandlers={{
+            click:(e)=>{
+              const id = markers[i].id
+              dispatch(setMarkerId(id))
+              }
+          }} >
             <Popup>{marker.popUp}</Popup>
           </Marker>
         ))}
