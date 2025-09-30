@@ -8,6 +8,7 @@ import { PolygonSection } from "./PolygonSection";
 import { ModeContext } from "../contexts/modeContext";
 import { editMode as editModeConstant } from "../contstants";
 import { MarkerSection } from "./MarkerSection";
+import { ObjectsTable } from "./objectsTable";
 
 // Fix default marker icon (otherwise it might not show up in some setups)
 delete L.Icon.Default.prototype._getIconUrl;
@@ -31,6 +32,7 @@ const [editMode ,setEditMode] = useState(editModeConstant.NONE);
   <div style={{flex:1}}>
     <PolygonSection title="poligon" onAddClicked={setEditMode} />
     <MarkerSection title={'marker'}   onAddClicked={setEditMode}/>
+    <ObjectsTable />
   </div>
   </div></ModeContext.Provider> );
 }

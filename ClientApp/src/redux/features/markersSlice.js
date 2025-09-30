@@ -33,7 +33,7 @@ const markersSlice = createSlice({
       state.markerId = action.payload;
     },
     addMarker: (state, action) => {
-      state.newMarkers = [...state.newMarkers,{latitude:action.payload.lat,longitude:action.payload.lng}];
+      state.newMarkers = [...state.newMarkers,{latitude:action.payload.lat,longitude:action.payload.lng,name:"marker"}];
     },
   },
   extraReducers: (builder) => {
