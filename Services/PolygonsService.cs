@@ -24,8 +24,15 @@ public class PolygonsService(IMongoDatabase<Polygon> db) : IPoligonService
 
     public async Task DeletePolygons(List<string> ids)
     {
-      
-        Expression<Func<Polygon, bool>> exp = p => ids.Contains(p.Id!);
+        Expression<Func<Polygon, bool>> exp;
+        if (ids.Count > 0)
+        {
+            exp = p => ids.Contains(p.Id!);
+        }
+        else
+        {
+            exp = p => true;
+        }
           await _db.DeleteMany(exp);
     }
 

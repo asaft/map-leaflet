@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addPolygonPosition } from "../redux/features/polygonSlice";
 import { ModeContext } from "../contexts/modeContext";
-import { editMode } from "../contstants";
+import { editModeConstants } from "../contstants";
 import { addMarker } from "../redux/features/markersSlice";
 
 export function LocationMarker({onPositionClicked,onMarkerPositionClicked}) {
@@ -17,11 +17,11 @@ export function LocationMarker({onPositionClicked,onMarkerPositionClicked}) {
     click(e) {
      // setPosition(e.latlng); // latlng has {lat, lng}
       console.log("Clicked at:", e.latlng);
-      if(modeContext === editMode.EDIT_POLIGONS){
+      if(modeContext === editModeConstants.EDIT_POLIGONS){
       onPositionClicked(e.latlng)
       dispatch(addPolygonPosition(e.latlng))
       }
-        if(modeContext === editMode.EDIT_MARKERS){
+        if(modeContext === editModeConstants.EDIT_MARKERS){
      // onPositionClicked(e.latlng)
      
       dispatch(addMarker(e.latlng))

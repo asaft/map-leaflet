@@ -29,10 +29,14 @@ public class PolygonsController : ControllerBase
         _poligonService.AddPolygon(polygon);
         return Ok(polygon);
     }
-     [HttpPost]
-    public async Task<IEnumerable<Polygon>> DeleteAsync(List<string>ids)
+    [HttpPost]
+    public async Task<ActionResult<IEnumerable<Polygon>>> BulkDelete(PolygonDeleteDTO polygonDeleteDTO)
     {
-        await _poligonService.DeletePolygons(ids);
+        await _poligonService.DeletePolygons(polygonDeleteDTO.Ids ?? []);
         return await _poligonService.GetAllPolygons();
     }
+}
+public class PolygonDeleteDTO
+{ 
+   public List<string>? Ids { get; set; }
 }

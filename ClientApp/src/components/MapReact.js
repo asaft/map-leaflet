@@ -1,11 +1,10 @@
 //import "./styles.css";
 import "leaflet/dist/leaflet.css";
 import { useSelector, useDispatch } from "react-redux";
-import { MapContainer, TileLayer, Marker, Popup,Polygon ,useMapEvents} from "react-leaflet";
-import MarkerClusterGroup from "react-leaflet-cluster";
+import { MapContainer, TileLayer, Marker, Popup,Polygon } from "react-leaflet";
 
 import { Icon, divIcon, point } from "leaflet";
-import { use, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { LocationMarker } from "./LocationMarker";
 import { addPolygonToDelete, getAllPolygons, removePolygonToDelete, setPoligons } from "../redux/features/polygonSlice";
 import { getAllMarkers, setMarkerId } from "../redux/features/markersSlice";
@@ -35,7 +34,7 @@ export default function MapReact({editMode}) {
     const [markers, setMarkers] = useState([]);
     const [polygons ,setPolygons]= useState([])
     const [polygonsToDelete ,setPolygonsToDelete]= useState([])
-    const [selectedPolygons ,setSelectedPolygons]= useState([])
+   
     
      const savedPolygons = useSelector(state=>state.polygon.list);
      const newPolygon = useSelector(state=>state.polygon.newPolygon)
@@ -55,6 +54,7 @@ export default function MapReact({editMode}) {
         if(convertedArr.length > 0){
           setPolygons(convertedArr)
         }
+        setPolygonsToDelete([]);
 
      },[savedPolygons])
 
@@ -87,14 +87,7 @@ export default function MapReact({editMode}) {
    
     
 
-    useEffect(()=>{
-      let arr= [];
-      const ps = polygons.forEach((p)=>{
-        arr.push(p)
-      })
     
-      setPolygons(arr);
-    },[selectedPolygons])
 
   return (<>
   

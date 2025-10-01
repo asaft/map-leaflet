@@ -6,7 +6,7 @@ import { Map } from "./map";
 import MapReact from "./MapReact";
 import { PolygonSection } from "./PolygonSection";
 import { ModeContext } from "../contexts/modeContext";
-import { editMode as editModeConstant } from "../contstants";
+import { editModeConstants  } from "../contstants";
 import { MarkerSection } from "./MarkerSection";
 import { ObjectsTable } from "./objectsTable";
 
@@ -20,18 +20,22 @@ L.Icon.Default.mergeOptions({
 
 export  function Home() {
 
-const [editMode ,setEditMode] = useState(editModeConstant.NONE);
+const [editMode ,setEditMode] = useState(editModeConstants.NONE);
 
 
  
 
   return (<ModeContext.Provider value={editMode}><div style={{display:"flex",flexDirection:'row'}}>
     <div style={{flex:1}}>
+      <div>
+        {editMode === editModeConstants.EDIT_POLIGONS && <h3>You are in Polygon edit mode</h3>}
+        {editMode === editModeConstants.EDIT_MARKERS && <h3>You are in Marker edit mode</h3>}
+      </div>
     <MapReact />
   </div>
   <div style={{flex:1}}>
-    <PolygonSection title="poligon" onAddClicked={setEditMode} />
-    <MarkerSection title={'marker'}   onAddClicked={setEditMode}/>
+    <PolygonSection title="poligon" editMode={editMode} onAddClicked={setEditMode} />
+    <MarkerSection title={'marker'}  editMode={editMode} onAddClicked={setEditMode}/>
     <ObjectsTable />
   </div>
   </div></ModeContext.Provider> );

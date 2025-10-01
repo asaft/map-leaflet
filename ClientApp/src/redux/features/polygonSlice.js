@@ -17,13 +17,13 @@ export const savePolygon = createAsyncThunk("post/polygons", async (polygon) => 
   })
   
   const response = await axios.post("/api/polygons/post",{positions});
-  return response.data; // This becomes the payload
+  return response.data; 
 });
-export const deletePolygons = createAsyncThunk("delete/polygons", async (polygon) => {
+export const deletePolygons = createAsyncThunk("delete/polygons", async (polygonIds) => {
   
   
-  const response = await axios.delete("/api/polygons/delete",polygon);
-  return response.data; // This becomes the payload
+  const response = await axios.post("/api/polygons/bulkDelete",{ids:polygonIds});
+  return response.data; 
 });
 
 
@@ -32,7 +32,9 @@ const polygonSlice = createSlice({
   initialState: { 
     loading:false,
     error:false,
-    list:[ ],newPolygon:[],poligonsToDelete:[]},
+    list:[],
+    newPolygon:[],
+    poligonsToDelete:[]},
   reducers: {
   
     addPolygonPosition: (state, action) => {
@@ -78,7 +80,7 @@ const polygonSlice = createSlice({
       })
       .addCase(deletePolygons.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload;
+        state.list = [...action.payload];
       })
       .addCase(deletePolygons.rejected, (state, action) => {
         state.loading = false;

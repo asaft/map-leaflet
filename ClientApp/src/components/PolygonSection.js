@@ -1,18 +1,23 @@
 import { useSelector, useDispatch } from "react-redux";
-import { savePolygon } from "../redux/features/polygonSlice";
-import { editMode } from "../contstants";
+import { savePolygon ,deletePolygons} from "../redux/features/polygonSlice";
+import { editModeConstants } from "../contstants";
 
 
-export function PolygonSection({title,onAddClicked}){
-    const polygon = useSelector((state) => state.polygon.newPolygon);
-  const dispatch = useDispatch();
+export function PolygonSection({title,onAddClicked,editMode}){
+const {newPolygon,poligonsToDelete} = useSelector((state) => state.polygon);
+const dispatch = useDispatch();
+
 const onSaveClicked = ()=>{
-  dispatch(savePolygon(polygon))
+  dispatch(savePolygon(newPolygon))
+}
+
+const onDeleteClicked = ()=>{
+  dispatch(deletePolygons(poligonsToDelete))
 }
     return(<>
     <div>{title}</div>
-    <button className="btn btn-primary" onClick={() =>{onAddClicked(editMode.EDIT_POLIGONS)}}>Add</button>
-    <button className="btn btn-primary" onClick={()=>{}}>Delete</button>
+    <button className="btn btn-primary" onClick={() =>{onAddClicked(editMode !== editModeConstants.EDIT_POLIGONS ? editModeConstants.EDIT_POLIGONS : editModeConstants.NONE)}}>{editMode === editModeConstants.EDIT_POLIGONS ? 'Close' : 'Add'}</button>
+    <button className="btn btn-primary" onClick={onDeleteClicked}>Delete</button>
     <button className="btn btn-primary" onClick={onSaveClicked}>Save</button>
 
     </>)
