@@ -124,7 +124,7 @@ export default function MapReact({editMode}) {
               dispatch(setMarkerId(id))
               }
           }} >
-            <Popup>{marker.popUp}</Popup>
+            <Popup>{marker.popUp || 'Can be deleted'}</Popup>
           </Marker>
         ))}
       <Polygon positions={newPolygon && newPolygon.length > 0 ? newPolygon : []} color="red" />
